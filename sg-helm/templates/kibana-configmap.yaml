@@ -27,9 +27,7 @@ data:
     elasticsearch.password: "${SERVER_PWD}"
 
     # SSL for outgoing requests from the Kibana Server to the browser (PEM formatted)
-    server.ssl.enabled: true
-    server.ssl.certificate: /usr/share/kibana/config/certificates-secrets/${NODE_NAME}.pem
-    server.ssl.key: /usr/share/kibana/config/certificates-secrets/${NODE_NAME}.key
+    server.ssl.enabled: false
 
     # If you need to provide a CA certificate for your Elasticsearch instance, put
     # the path of the pem file here.

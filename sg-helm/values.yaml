@@ -32,7 +32,7 @@ common:
   # Enable or disable Search Guard enterprise modules
   # If you run Search Guard in production you need to obtain a license
   #  when set to 'true'
-  sg_enterprise_modules_enabled: true
+  sg_enterprise_modules_enabled: false
   
   # Run automatically sgadmin whenever neccessary 
   update_sgconfig_on_change: true
@@ -49,9 +49,9 @@ common:
   # Defines the service type for all elasticsearch outward-facing (non-discovery) services.
   # This does not apply to Kibana.
   # WARNING: Setting this to 'LoadBalancer' will probably expose elasticsearch to the outside/internet
-  serviceType: ClusterIP
+  # serviceType: ClusterIP
   #serviceType: NodePort
-  #serviceType: LoadBalancer
+  serviceType: LoadBalancer
 
   # Any extra or specific configuration that is needed can be added here.
   # Will be added to all elasticsearch.yml files on all nodes
@@ -63,29 +63,6 @@ common:
     #    allow-origin: "*"
     #index.codec: best_compression
   
-  # Configure additional users (maps to sg_internal_users.yml)
-  users:
-    user1:
-      hash: $2a$12$ssCCgh2NUg07JGN0rjGbM.BdssqVR/YFJcgHp0UGns5JDymv..TMU
-      roles:
-        - beatsreader
-
-  # Configure additional rolemappings (maps to sg_roles_mapping.yml)
-  rolesmapping:
-    sg_read_beats:
-      backendroles:
-        - beatsreader
-
-  # Configure additional role (maps to sg_roles.yml)
-  roles:
-    sg_read_beats:
-      cluster:
-        - CLUSTER_COMPOSITE_OPS_RO
-      indices:
-        '*beat*':
-          '*':
-            - READ
-
   # If you want any plugins installed, give them here as a list. They will be
   # passed to elasticsearch-plugin install -b {line here}
   # Do not add the searchguard plugin here, because its already installed in the main image
@@ -98,13 +75,13 @@ common:
 # have dedicated ingest nodes, that will only perform this specific task.
 client:
   # For production we recommend at least 2 replicas
-  replicas: 1
+  replicas: 2
   # 'hard' means that pods will only be scheduled if there are enough nodes for them and that they will never end up on the same node. 
   # 'soft' will do this "best effort"
   # For production we recommend setting this to 'hard'
   antiAffinity: "soft"
   # For production we recommend to set this to at least 4g and adjust the memory limits and requests accordingly
-  heapSize: 1g
+  heapSize: 4g
   # More info on what this setting does is in the config map. Only change this
   # if you set the cpu limit to over 1 full cpu.
   processors: 1
@@ -127,7 +104,7 @@ client:
 # master and data roles.
 data:
   # For production we recommend at least 2 replicas
-  replicas: 1
+  replicas: 2
   # 'hard' means that pods will only be scheduled if there are enough nodes for them and that they will never end up on the same node. 
   # 'soft' will do this "best effort"
   # For production we recommend setting this to 'hard'
